@@ -1,0 +1,86 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: portworx-storage
+  labels:
+    app: portworx-storage
+  namespace: default
+spec:
+  template:
+    metadata:
+      labels:
+        app: portworx-storage
+      namespace: default
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Equal
+        effect: NoSchedule
+      hostNetwork: true
+      hostIPC: true
+      containers:
+      - name: portworx-storage
+        image: portworx/px-dev
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        args:
+        - "-daemon"
+        - "-k etcd://10.0.1.1:2379"
+        - "-k etcd://10.0.1.2:2379"
+        - "-k etcd://10.0.1.3:2379"
+        - "-d wg0 -m wg0"
+        - "-c $(PWX_CLUSTER_ID)"
+        - "-s $(PX_STORAGE_DEVICE)"
+        env:
+        - name: PWX_CLUSTER_ID
+          value: portworx-storage-0
+        - name: PX_STORAGE_DEVICE
+          value: /dev/vdb
+        volumeMounts:
+        - name: docker-plugins
+          mountPath: /run/docker/plugins
+        - name: var-lib-osd
+          mountPath: /var/lib/osd:shared
+        - name: dev
+          mountPath: /dev
+        - name: etc-pwx
+          mountPath: /etc/pwx
+        - name: opt-pwx-bin
+          mountPath: /export_bin
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+        - name: var-cores
+          mountPath: /var/cores
+        - name: var-lib-kubelet
+          mountPath: /var/lib/kubelet:shared
+        - name: usr-src
+          mountPath: /usr/src
+      volumes:
+      - name: docker-plugins
+        hostPath:
+          path: /run/docker/plugins
+      - name: var-lib-osd
+        hostPath:
+          path: /opt/pwx/var/lib/osd
+      - name: dev
+        hostPath:
+          path: /dev
+      - name: etc-pwx
+        hostPath:
+          path: /opt/pwx/etc/pwx
+      - name: opt-pwx-bin
+        hostPath:
+          path: /opt/pwx/bin
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock
+      - name: var-cores
+        hostPath:
+          path: /opt/pwx/var/cores
+      - name: var-lib-kubelet
+        hostPath:
+          path: /var/lib/kubelet
+      - name: usr-src
+        hostPath:
+          path: /usr/src

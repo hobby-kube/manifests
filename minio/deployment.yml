@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: minio
+  labels:
+    app: minio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      name: minio
+      labels:
+        app: minio
+    spec:
+      containers:
+        - name: minio
+          image: minio/minio
+          imagePullPolicy: Always
+          command: ["minio"]
+          args: ["server", "/data"]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          ports:
+            - name: service
+              containerPort: 9000
+          env:
+            - name: MINIO_ACCESS_KEY
+              value: admin
+            - name: MINIO_SECRET_KEY
+              value: replacethishighlysecrettestkey
+          livenessProbe:
+            tcpSocket:
+              port: 9000
+            timeoutSeconds: 10
+          resources:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: minio-persistent-storage
+        - name: minio-user
+          secret:
+            secretName: minio-user
