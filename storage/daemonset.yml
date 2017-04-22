@@ -20,7 +20,7 @@ spec:
       hostIPC: true
       containers:
       - name: portworx-storage
-        image: portworx/px-dev
+        image: portworx/px-dev:1.1.6
         imagePullPolicy: Always
         securityContext:
           privileged: true
