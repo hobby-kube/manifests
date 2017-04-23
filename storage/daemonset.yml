@@ -20,15 +20,13 @@ spec:
       hostIPC: true
       containers:
       - name: portworx-storage
-        image: portworx/px-dev:1.1.6
+        image: portworx/px-dev
         imagePullPolicy: Always
         securityContext:
           privileged: true
         args:
         - "-daemon"
-        - "-k etcd://10.0.1.1:2379"
-        - "-k etcd://10.0.1.2:2379"
-        - "-k etcd://10.0.1.3:2379"
+        - "-k etcd://10.0.1.1:2379,etcd://10.0.1.2:2379,etcd://10.0.1.3:2379"
         - "-d wg0 -m wg0"
         - "-c $(PWX_CLUSTER_ID)"
         - "-s $(PX_STORAGE_DEVICE)"

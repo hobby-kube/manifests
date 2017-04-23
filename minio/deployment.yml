@@ -16,31 +16,36 @@ spec:
         app: minio
     spec:
       containers:
-        - name: minio
-          image: minio/minio
-          imagePullPolicy: Always
-          command: ["minio"]
-          args: ["server", "/data"]
-          volumeMounts:
-            - name: data
-              mountPath: /data
-          ports:
-            - name: service
-              containerPort: 9000
-          env:
-            - name: MINIO_ACCESS_KEY
-              value: admin
-            - name: MINIO_SECRET_KEY
-              value: replacethishighlysecrettestkey
-          livenessProbe:
-            tcpSocket:
-              port: 9000
-            timeoutSeconds: 10
-          resources:
-      volumes:
+      - name: minio
+        image: minio/minio
+        imagePullPolicy: Always
+        command: ["minio"]
+        args: ["server", "/data"]
+        volumeMounts:
         - name: data
-          persistentVolumeClaim:
-            claimName: minio-persistent-storage
-        - name: minio-user
-          secret:
-            secretName: minio-user
+          mountPath: /data
+        ports:
+        - name: service
+          containerPort: 9000
+        env:
+        - name: MINIO_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-user
+              key: accesskey
+        - name: MINIO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-user
+              key: secretkey
+        livenessProbe:
+          tcpSocket:
+            port: 9000
+          timeoutSeconds: 10
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: minio-persistent-storage
+      - name: minio-user
+        secret:
+          secretName: minio-user
