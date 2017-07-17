@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   labels:
     app: kubernetes-dashboard
-    kubernetes.io/cluster-service: "true"
   name: kubernetes-dashboard
   namespace: kube-system
 spec:
@@ -15,17 +14,11 @@ spec:
     metadata:
       labels:
         app: kubernetes-dashboard
-      annotations:
-        scheduler.alpha.kubernetes.io/tolerations: |
-          [
-            {
-              "key": "dedicated",
-              "operator": "Equal",
-              "value": "master",
-              "effect": "NoSchedule"
-            }
-          ]
     spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Equal
+        effect: NoSchedule
       containers:
       - name: kubernetes-dashboard
         image: gcr.io/google_containers/kubernetes-dashboard-amd64:v1.6.1
