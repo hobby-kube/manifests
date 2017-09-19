@@ -1,0 +1,22 @@
+apiVersion: rook.io/v1alpha1
+kind: Cluster
+metadata:
+  name: rook
+  namespace: rook
+spec:
+  versionTag: master
+  dataDirHostPath: /storage
+  placement:
+    all:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Equal
+        effect: NoSchedule
+  storage:
+    useAllNodes: true
+    useAllDevices: false
+    # deviceFilter: vdb
+    storeConfig:
+      storeType: filestore
+      databaseSizeMB: 1024
+      journalSizeMB: 1024
