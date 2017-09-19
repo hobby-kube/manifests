@@ -13,7 +13,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: kube-lego
-        image: jetstack/kube-lego:0.1.5
+        image: jetstack/kube-lego:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
