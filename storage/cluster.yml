@@ -4,7 +4,8 @@ metadata:
   name: rook
   namespace: rook
 spec:
-  versionTag: master
+  backend: ceph
+  hostNetwork: false
   dataDirHostPath: /storage
   placement:
     all:
@@ -17,6 +18,8 @@ spec:
     useAllDevices: false
     # deviceFilter: vdb
     storeConfig:
-      storeType: filestore
+      storeType: bluestore
       databaseSizeMB: 1024
       journalSizeMB: 1024
+    directories:
+    - path: /storage/data

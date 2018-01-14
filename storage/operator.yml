@@ -15,12 +15,19 @@ spec:
         image: rook/rook:master
         args: ["operator"]
         env:
-        - name: ROOK_REPO_PREFIX
-          value: rook
-        # The interval to check if every mon is in the quorum.
         - name: ROOK_MON_HEALTHCHECK_INTERVAL
-          value: "20s"
-        # The duration to wait before trying to failover or remove/replace the
-        # current mon with a new mon (useful for compensating flapping network).
+          value: "45s"
         - name: ROOK_MON_OUT_TIMEOUT
           value: "300s"
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
