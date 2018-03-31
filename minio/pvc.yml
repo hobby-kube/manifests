@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: minio-persistent-storage
 spec:
-  storageClassName: portworx
+  storageClassName: rook-block
   accessModes:
     - ReadWriteOnce
   resources:
