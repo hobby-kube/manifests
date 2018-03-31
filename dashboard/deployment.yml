@@ -21,7 +21,7 @@ spec:
         effect: NoSchedule
       containers:
       - name: kubernetes-dashboard
-        image: gcr.io/google_containers/kubernetes-dashboard-amd64:v1.8.1
+        image: gcr.io/google_containers/kubernetes-dashboard-amd64:v1.8.3
         imagePullPolicy: Always
         ports:
         - containerPort: 9090
