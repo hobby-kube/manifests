@@ -17,9 +17,12 @@ spec:
     useAllNodes: true
     useAllDevices: false
     # deviceFilter: vdb
+    #storeType: bluestore
+    #  databaseSizeMB: 1024
+    #  journalSizeMB: 1024
     directories:
     - path: /storage/data
     storeConfig:
-      storeType: bluestore
+      storeType: filestore
       databaseSizeMB: 1024
       journalSizeMB: 1024
