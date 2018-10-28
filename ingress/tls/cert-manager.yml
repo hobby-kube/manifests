@@ -2,7 +2,7 @@ apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: cert-manager
-  namespace: default
+  namespace: ingress
   labels:
     app: cert-manager
 spec:
@@ -26,6 +26,8 @@ spec:
         args:
         - --cluster-resource-namespace=$(POD_NAMESPACE)
         - --leader-election-namespace=$(POD_NAMESPACE)
+        - --default-issuer-name=letsencrypt
+        - --default-issuer-kind=ClusterIssuer
         env:
         - name: POD_NAMESPACE
           valueFrom:
@@ -40,10 +42,9 @@ spec:
             memory: 64Mi
 ---
 apiVersion: certmanager.k8s.io/v1alpha1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   name: letsencrypt
-  namespace: default
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
