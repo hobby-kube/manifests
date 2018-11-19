@@ -47,6 +47,7 @@ spec:
         - /nginx-ingress-controller
         - --default-backend-service=$(POD_NAMESPACE)/default-http-backend
         - --configmap=$(POD_NAMESPACE)/nginx-ingress-controller
+        - --annotations-prefix=nginx.ingress.kubernetes.io
         readinessProbe:
           httpGet:
             path: /healthz
