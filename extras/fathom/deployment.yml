@@ -1,0 +1,44 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: fathom
+  name: fathom
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fathom
+  template:
+    metadata:
+      labels:
+        app: fathom
+    spec:
+      containers:
+      - name: fathom
+        image: usefathom/fathom:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8080
+        volumeMounts:
+          - name: data
+            mountPath: /data
+        env:
+          - name: FATHOM_GZIP
+            value: "true"
+          - name: FATHOM_SERVER_ADDR
+            value: ":8080"
+          - name: FATHOM_DATABASE_DRIVER
+            value: "sqlite3"
+          - name: FATHOM_DATABASE_NAME
+            value: "/data/fathom.sqlite"
+          - name: FATHOM_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: fathom-secret
+                key: secret
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: fathom-persistent-storage
