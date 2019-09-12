@@ -53,4 +53,7 @@ spec:
     email: user@example.com
     privateKeySecretRef:
       name: letsencrypt
-    http01: {}
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
