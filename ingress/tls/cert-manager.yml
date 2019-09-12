@@ -26,6 +26,7 @@ spec:
         args:
         - --cluster-resource-namespace=$(POD_NAMESPACE)
         - --leader-election-namespace=$(POD_NAMESPACE)
+        - --webhook-namespace=$(POD_NAMESPACE)
         - --default-issuer-name=letsencrypt
         - --default-issuer-kind=ClusterIssuer
         env:
