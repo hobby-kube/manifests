@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-ingress-controller
@@ -6,6 +6,9 @@ metadata:
     k8s-app: nginx-ingress-controller
   namespace: ingress
 spec:
+  selector:
+    matchLabels:
+      k8s-app: nginx-ingress-controller
   replicas: 1
   template:
     metadata:
@@ -61,7 +64,7 @@ spec:
           initialDelaySeconds: 10
           timeoutSeconds: 1
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: default-http-backend
@@ -69,6 +72,9 @@ metadata:
     k8s-app: default-http-backend
   namespace: ingress
 spec:
+  selector:
+    matchLabels:
+      k8s-app: default-http-backend
   replicas: 1
   template:
     metadata:

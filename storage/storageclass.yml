@@ -1,9 +1,10 @@
-apiVersion: rook.io/v1alpha1
-kind: Pool
+apiVersion: ceph.rook.io/v1
+kind: CephBlockPool
 metadata:
   name: replicapool
   namespace: rook
 spec:
+  failureDomain: host
   replicated:
     size: 2
 ---
@@ -11,6 +12,12 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
    name: rook-block
-provisioner: rook.io/block
+provisioner: rook.rbd.csi.ceph.com
 parameters:
   pool: replicapool
+  clusterID: rook
+  csi.storage.k8s.io/provisioner-secret-name: rook-ceph-csi
+  csi.storage.k8s.io/provisioner-secret-namespace: rook
+  csi.storage.k8s.io/node-stage-secret-name: rook-ceph-csi
+  csi.storage.k8s.io/node-stage-secret-namespace: rook
+reclaimPolicy: Delete

@@ -3,12 +3,16 @@ kind: Pod
 metadata:
   name: rook-tools
   namespace: rook
+  labels:
+    app: rook-tools
 spec:
   dnsPolicy: ClusterFirstWithHostNet
   containers:
   - name: rook-tools
-    image: rook/toolbox:master
-    imagePullPolicy: Always
+    image: rook/ceph:v1.1.0
+    command: ["/tini"]
+    args: ["-g", "--", "/usr/local/bin/toolbox.sh"]
+    imagePullPolicy: IfNotPresent
     env:
       - name: ROOK_ADMIN_SECRET
         valueFrom:
@@ -26,7 +30,8 @@ spec:
         name: libmodules
       - name: mon-endpoint-volume
         mountPath: /etc/rook
-  hostNetwork: false
+  # if hostNetwork: false, the "rbd map" command hangs, see https://github.com/rook/rook/issues/2021
+  hostNetwork: true
   volumes:
     - name: dev
       hostPath:
