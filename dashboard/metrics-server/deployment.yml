@@ -21,6 +21,9 @@ spec:
       containers:
       - name: metrics-server
         image: gcr.io/google_containers/metrics-server-amd64:v0.3.5
+        args:
+        - --kubelet-insecure-tls
+        - --kubelet-preferred-address-types=InternalIP
         imagePullPolicy: Always
         volumeMounts:
         - name: tmp-dir
