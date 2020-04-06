@@ -1612,7 +1612,7 @@ spec:
     spec:
       containers:
       - name: rook-operator
-        image: rook/ceph:master
+        image: rook/ceph:v1.1.9
         args: ["ceph", "operator"]
         env:
         - name: RBAC_ENABLED
