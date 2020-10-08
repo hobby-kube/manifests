@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: statping
+  name: statping
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: statping
+  template:
+    metadata:
+      labels:
+        app: statping
+    spec:
+      containers:
+      - name: statping
+        image: statping/statping:latest
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080
+        volumeMounts:
+          - name: data
+            mountPath: /app
+        env:
+          - name: DB_CONN
+            value: sqlite
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: statping-persistent-storage
