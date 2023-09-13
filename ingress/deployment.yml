@@ -16,7 +16,7 @@ spec:
         k8s-app: nginx-ingress-controller
     spec:
       tolerations:
-      - key: node-role.kubernetes.io/master
+      - key: node-role.kubernetes.io/control-plane
         operator: Equal
         effect: NoSchedule
       affinity:
@@ -24,7 +24,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: node-role.kubernetes.io/master
+              - key: node-role.kubernetes.io/control-plane
                 operator: Exists
       hostNetwork: true
       terminationGracePeriodSeconds: 60
