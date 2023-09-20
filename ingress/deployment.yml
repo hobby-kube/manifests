@@ -29,7 +29,7 @@ spec:
       hostNetwork: true
       terminationGracePeriodSeconds: 60
       containers:
-      - image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.20.0
+      - image: registry.k8s.io/ingress-nginx/controller:v1.8.2
         name: nginx-ingress-controller
         imagePullPolicy: Always
         ports:
@@ -48,9 +48,9 @@ spec:
                 fieldPath: metadata.namespace
         args:
         - /nginx-ingress-controller
-        - --default-backend-service=$(POD_NAMESPACE)/default-http-backend
         - --configmap=$(POD_NAMESPACE)/nginx-ingress-controller
         - --annotations-prefix=nginx.ingress.kubernetes.io
+        - --ingress-class=nginx
         readinessProbe:
           httpGet:
             path: /healthz
@@ -63,44 +63,3 @@ spec:
             scheme: HTTP
           initialDelaySeconds: 10
           timeoutSeconds: 1
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: default-http-backend
-  labels:
-    k8s-app: default-http-backend
-  namespace: ingress
-spec:
-  selector:
-    matchLabels:
-      k8s-app: default-http-backend
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        k8s-app: default-http-backend
-    spec:
-      terminationGracePeriodSeconds: 60
-      containers:
-      - name: default-http-backend
-        # Any image is permissable as long as:
-        # 1. It serves a 404 page at /
-        # 2. It serves 200 on a /healthz endpoint
-        image: gcr.io/google_containers/defaultbackend:1.4
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 30
-          timeoutSeconds: 5
-        ports:
-        - containerPort: 8080
-        resources:
-          limits:
-            cpu: 10m
-            memory: 20Mi
-          requests:
-            cpu: 10m
-            memory: 20Mi

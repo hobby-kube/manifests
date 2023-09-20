@@ -4,4 +4,4 @@ metadata:
   name: nginx-ingress-controller
   namespace: ingress
 data:
-  enable-vts-status: 'true'
+  allow-snippet-annotations: "true"
