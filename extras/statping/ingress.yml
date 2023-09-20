@@ -4,8 +4,8 @@ metadata:
   name: statping
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt"
-    ingressClassName: "nginx"
 spec:
+  ingressClassName: "nginx"
   tls:
   - hosts:
     - statping.example.com

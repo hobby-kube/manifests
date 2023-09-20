@@ -4,9 +4,9 @@ metadata:
   name: minio-ingress
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt"
-    ingressClassName: "nginx"
     nginx.ingress.kubernetes.io/proxy-body-size: 1024m
 spec:
+  ingressClassName: "nginx"
   tls:
   - hosts:
     - minio.example.com

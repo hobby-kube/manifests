@@ -5,11 +5,11 @@ metadata:
   namespace: kube-system
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt"
-    ingressClassName: "nginx"
     nginx.ingress.kubernetes.io/auth-type: "basic"
     nginx.ingress.kubernetes.io/auth-secret: kubernetes-dashboard-auth
     nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
 spec:
+  ingressClassName: "nginx"
   tls:
   - hosts:
     - dashboard.example.com
