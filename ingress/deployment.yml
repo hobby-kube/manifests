@@ -29,7 +29,7 @@ spec:
       hostNetwork: true
       terminationGracePeriodSeconds: 60
       containers:
-      - image: registry.k8s.io/ingress-nginx/controller:v1.8.2
+      - image: registry.k8s.io/ingress-nginx/controller:v1.9.0
         name: nginx-ingress-controller
         imagePullPolicy: Always
         ports:
@@ -50,6 +50,7 @@ spec:
         - /nginx-ingress-controller
         - --configmap=$(POD_NAMESPACE)/nginx-ingress-controller
         - --annotations-prefix=nginx.ingress.kubernetes.io
+        - --controller-class=k8s.io/ingress-nginx
         - --ingress-class=nginx
         readinessProbe:
           httpGet:
@@ -63,3 +64,10 @@ spec:
             scheme: HTTP
           initialDelaySeconds: 10
           timeoutSeconds: 1
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: nginx
+spec:
+  controller: k8s.io/ingress-nginx
